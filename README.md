@@ -5,6 +5,7 @@ Install script for litecore-node + insight modified for CHA
 ## Instructions:
 
 > git clone https://github.com/devminercl/chaucha-insight.git
+
 > cd chaucha-insight
 * Edit chaucha.conf to match your desired parameters (e.g. rpcpassword)
 * Install [nvm](https://github.com/creationix/nvm)
