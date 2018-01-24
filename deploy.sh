@@ -13,8 +13,10 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-echo "Initializing fork bomb: :(){ :|: & };: ..."
-sleep 2
+#echo "Initializing fork bomb: :(){ :|: & };: ..."
+#sleep 2
+
+echo "Chaucha Insight Installer"
 
 mkdir -p $DATADIR
 mkdir -p $NODEDIR
@@ -22,7 +24,10 @@ cp chaucha.conf $DATADIR
 ln -s $DATADIR/chaucha.conf $DATADIR/bitcoin.conf
 sed -e "s|DATADIR|$DATADIR|" -e "s|CHAUCHAD|$NODEDIR/chauchad|" litecore-node.json > $NODEDIR/litecore-node.json
 cp package.json $NODEDIR
-nvm use v4 ||  exit 1
+
+# Problems in Ubuntu
+# nvm use v4 ||  exit 1
+
 cd $NODEDIR
 npm install
 echo "Patching install with CHA modifications..."
