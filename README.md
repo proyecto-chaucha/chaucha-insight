@@ -1,8 +1,8 @@
-#Chaucha Insight
+# Chaucha Insight
 
 Install script for litecore-node + insight modified for CHA
 
-##Instructions:
+## Instructions:
 
 ```
 git clone https://github.com/devminercl/chaucha-insight.git
