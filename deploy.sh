@@ -2,8 +2,8 @@
 
 source ~/.bashrc
 
-DATADIR=~/test/chaucha
-NODEDIR=~/test/chaucha-insight
+DATADIR=~/insight/config
+NODEDIR=~/insight/chaucha-insight
 CWD=`pwd`
 
 if [[ $EUID -eq 0 ]]; then
