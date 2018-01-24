@@ -39,5 +39,6 @@ cp $CWD/chauchad $NODEDIR/
 pushd node_modules/litecore-node/bin
 ln -sf $NODEDIR/chauchad litecoind
 ln -sf $NODEDIR/chauchad chauchad
+echo "./node_modules/litecore-node/bin/litecore-node start" > start.sh
 popd
-cd $CWD
+cd $NODEDIR
