@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  insight:
+    container_name: chainsight
+    volumes:
+      - .:/root/insight
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      # machine port : docker port
+      - 3001:3001
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
