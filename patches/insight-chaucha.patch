@@ -1,0 +1,271 @@
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-api/lib/blocks.js old_modules/insight-api/lib/blocks.js
+--- node_modules/insight-api/lib/blocks.js	2016-05-27 14:26:43.000000000 -0400
++++ old_modules/insight-api/lib/blocks.js	2018-01-11 17:27:13.156000000 -0300
+@@ -137,7 +137,8 @@
+     confirmations: info.confirmations,
+     previousblockhash: this._normalizePrevHash(blockObj.header.prevHash),
+     nextblockhash: info.nextHash,
+-    reward: this.getBlockReward(info.height) / 1e8,
++    // CHA nSubsidy formula
++    reward: (50000/this.getBlockReward(info.height) + 10),
+     isMainChain: (info.confirmations !== -1),
+     poolInfo: this.getPoolInfo(block)
+   };
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/js/main.js old_modules/insight-ui/public/js/main.js
+--- node_modules/insight-ui/public/js/main.js	2016-05-18 01:40:12.000000000 -0400
++++ old_modules/insight-ui/public/js/main.js	2018-01-11 12:50:58.532000000 -0300
+@@ -1,6 +1,6 @@
+ // Source: public/src/js/app.js
+-var defaultLanguage = localStorage.getItem('insight-language') || 'en';
+-var defaultCurrency = localStorage.getItem('insight-currency') || 'BTC';
++var defaultLanguage = localStorage.getItem('insight-language') || 'es';
++var defaultCurrency = localStorage.getItem('insight-currency') || 'CHA';
+ 
+ angular.module('insight',[
+   'ngAnimate',
+@@ -269,7 +269,7 @@
+ 
+         if (this.symbol === 'USD') {
+           response = _roundFloat((value * this.factor), 2);
+-        } else if (this.symbol === 'mBTC') {
++        } else if (this.symbol === 'mCHA') {
+           this.factor = 1000;
+           response = _roundFloat((value * this.factor), 5);
+         } else if (this.symbol === 'bits') {
+@@ -296,7 +296,7 @@
+         Currency.get({}, function(res) {
+           $rootScope.currency.factor = $rootScope.currency.bitstamp = res.data.bitstamp;
+         });
+-      } else if (currency === 'mBTC') {
++      } else if (currency === 'mCHA') {
+         $rootScope.currency.factor = 1000;
+       } else if (currency === 'bits') {
+         $rootScope.currency.factor = 1000000;
+@@ -360,7 +360,7 @@
+     $rootScope.currency = {
+       factor: 1,
+       bitstamp: 0,
+-      symbol: 'BTC'
++      symbol: 'CHA'
+     };
+ 
+     $scope.menu = [{
+@@ -1381,4 +1381,4 @@
+     gettextCatalog.setStrings('es', {"(Input unconfirmed)":"(Entrada sin confirmar)","404 Page not found :(":"404 Página no encontrada :(","<strong>insight</strong>  is an <a href=\"http://live.insight.is/\" target=\"_blank\">open-source Bitcoin blockchain explorer</a> with complete REST and websocket APIs that can be used for writing web wallets and other apps  that need more advanced blockchain queries than provided by bitcoind RPC.  Check out the <a href=\"https://github.com/bitpay/insight-ui\" target=\"_blank\">source code</a>.":"<strong>insight</strong>  es un <a href=\"http://live.insight.is/\" target=\"_blank\">explorador de bloques de Bitcoin open-source</a> con un completo conjunto de REST y APIs de websockets que pueden ser usadas para escribir monederos de Bitcoins y otras aplicaciones que requieran consultar un explorador de bloques.  Obtén el código en <a href=\"http://github.com/bitpay/insight\" target=\"_blank\">el repositorio abierto de Github</a>.","<strong>insight</strong> is still in development, so be sure to report any bugs and provide feedback for improvement at our <a href=\"https://github.com/bitpay/insight/issues\" target=\"_blank\">github issue tracker</a>.":"<strong>insight</strong> esta en desarrollo aún, por ello agradecemos que nos reporten errores o sugerencias para mejorar el software. <a href=\"https://github.com/bitpay/insight-ui/issues\" target=\"_blank\">Github issue tracker</a>.","About":"Acerca de","Address":"Dirección","Age":"Edad","Application Status":"Estado de la Aplicación","Best Block":"Mejor Bloque","Bitcoin node information":"Información del nodo Bitcoin","Block":"Bloque","Block Reward":"Bloque Recompensa","Blocks":"Bloques","Bytes Serialized":"Bytes Serializados","Can't connect to bitcoind to get live updates from the p2p network. (Tried connecting to bitcoind at {{host}}:{{port}} and failed.)":"No se pudo conectar a bitcoind para obtener actualizaciones en vivo de la red p2p. (Se intentó conectar a bitcoind de {{host}}:{{port}} y falló.)","Can't connect to insight server. Attempting to reconnect...":"No se pudo conectar al servidor insight. Intentando re-conectar...","Can't connect to internet. Please, check your connection.":"No se pudo conectar a Internet. Por favor, verifique su conexión.","Complete":"Completado","Confirmations":"Confirmaciones","Conn":"Con","Connections to other nodes":"Conexiones a otros nodos","Current Blockchain Tip (insight)":"Actual Blockchain Tip (insight)","Current Sync Status":"Actual Estado de Sincronización","Details":"Detalles","Difficulty":"Dificultad","Double spent attempt detected. From tx:":"Intento de doble gasto detectado. De la transacción:","Error!":"¡Error!","Fee":"Tasa","Final Balance":"Balance Final","Finish Date":"Fecha Final","Go to home":"Volver al Inicio","Hash Serialized":"Hash Serializado","Height":"Altura","Included in Block":"Incluido en el Bloque","Incoherence in levelDB detected:":"Detectada una incoherencia en levelDB:","Info Errors":"Errores de Información","Initial Block Chain Height":"Altura de la Cadena en Bloque Inicial","Input":"Entrada","Last Block":"Último Bloque","Last Block Hash (Bitcoind)":"Último Bloque Hash (Bitcoind)","Latest Blocks":"Últimos Bloques","Latest Transactions":"Últimas Transacciones","Loading Address Information":"Cargando Información de la Dirección","Loading Block Information":"Cargando Información del Bloque","Loading Selected Date...":"Cargando Fecha Seleccionada...","Loading Transaction Details":"Cargando Detalles de la Transacción","Loading Transactions...":"Cargando Transacciones...","Loading...":"Cargando...","Mined Time":"Hora de Minado","Mined by":"Minado por","Mining Difficulty":"Dificultad de Minado","Next Block":"Próximo Bloque","No Inputs (Newly Generated Coins)":"Sin Entradas (Monedas Recién Generadas)","No blocks yet.":"No hay bloques aún.","No matching records found!":"¡No se encontraron registros coincidentes!","No. Transactions":"Nro. de Transacciones","Number Of Transactions":"Número de Transacciones","Output":"Salida","Powered by":"Funciona con","Previous Block":"Bloque Anterior","Protocol version":"Versión del protocolo","Proxy setting":"Opción de proxy","Received Time":"Hora de Recibido","Redirecting...":"Redireccionando...","Search for block, transaction or address":"Buscar bloques, transacciones o direcciones","See all blocks":"Ver todos los bloques","Show Transaction Output data":"Mostrar dato de Salida de la Transacción","Show all":"Mostrar todos","Show input":"Mostrar entrada","Show less":"Ver menos","Show more":"Ver más","Size":"Tamaño","Size (bytes)":"Tamaño (bytes)","Skipped Blocks (previously synced)":"Bloques Saltados (previamente sincronizado)","Start Date":"Fecha de Inicio","Status":"Estado","Summary":"Resumen","Summary <small>confirmed</small>":"Resumen <small>confirmados</small>","Sync Progress":"Proceso de Sincronización","Sync Status":"Estado de Sincronización","Sync Type":"Tipo de Sincronización","Synced Blocks":"Bloques Sincornizados","Testnet":"Red de prueba","There are no transactions involving this address.":"No hay transacciones para esta dirección","Time Offset":"Desplazamiento de hora","Timestamp":"Fecha y hora","Today":"Hoy","Total Amount":"Cantidad Total","Total Received":"Total Recibido","Total Sent":"Total Enviado","Transaction":"Transacción","Transaction Output Set Information":"Información del Conjunto de Salida de la Transacción","Transaction Outputs":"Salidas de la Transacción","Transactions":"Transacciones","Type":"Tipo","Unconfirmed":"Sin confirmar","Unconfirmed Transaction!":"¡Transacción sin confirmar!","Unconfirmed Txs Balance":"Balance sin confirmar","Value Out":"Valor de Salida","Version":"Versión","Waiting for blocks...":"Esperando bloques...","Waiting for transactions...":"Esperando transacciones...","by date.":"por fecha.","first seen at":"Visto a","mined":"minado","mined on:":"minado el:","Waiting for blocks":"Esperando bloques"});
+     gettextCatalog.setStrings('ja', {"(Input unconfirmed)":"(入力は未検証です)","404 Page not found :(":"404 ページがみつかりません (´・ω・`)","<strong>insight</strong>  is an <a href=\"http://live.insight.is/\" target=\"_blank\">open-source Bitcoin blockchain explorer</a> with complete REST and websocket APIs that can be used for writing web wallets and other apps  that need more advanced blockchain queries than provided by bitcoind RPC.  Check out the <a href=\"https://github.com/bitpay/insight-ui\" target=\"_blank\">source code</a>.":"<strong>insight</strong>は、bitcoind RPCの提供するものよりも詳細なブロックチェインへの問い合わせを必要とするウェブウォレットやその他のアプリを書くのに使える、完全なRESTおよびwebsocket APIを備えた<a href=\"http://live.insight.is/\" target=\"_blank\">オープンソースのビットコインブロックエクスプローラ</a>です。<a href=\"https://github.com/bitpay/insight-ui\" target=\"_blank\">ソースコード</a>を確認","<strong>insight</strong> is still in development, so be sure to report any bugs and provide feedback for improvement at our <a href=\"https://github.com/bitpay/insight/issues\" target=\"_blank\">github issue tracker</a>.":"<strong>insight</strong>は現在開発中です。<a href=\"https://github.com/bitpay/insight/issues\" target=\"_blank\">githubのissueトラッカ</a>にてバグの報告や改善案の提案をお願いします。","About":"はじめに","Address":"アドレス","Age":"生成後経過時間","An error occured in the verification process.":"検証過程でエラーが発生しました。","An error occured:<br>{{error}}":"エラーが発生しました:<br>{{error}}","Application Status":"アプリケーションの状態","Best Block":"最良ブロック","Bitcoin comes with a way of signing arbitrary messages.":"Bitcoinには任意のメッセージを署名する昨日が備わっています。","Bitcoin node information":"Bitcoinノード情報","Block":"ブロック","Block Reward":"ブロック報酬","Blocks":"ブロック","Broadcast Raw Transaction":"生のトランザクションを配信","Bytes Serialized":"シリアライズ後の容量 (バイト)","Can't connect to bitcoind to get live updates from the p2p network. (Tried connecting to bitcoind at {{host}}:{{port}} and failed.)":"P2Pネットワークからライブ情報を取得するためにbitcoindへ接続することができませんでした。({{host}}:{{port}} への接続を試みましたが、失敗しました。)","Can't connect to insight server. Attempting to reconnect...":"insight サーバに接続できません。再接続しています...","Can't connect to internet. Please, check your connection.":"インターネットに接続できません。コネクションを確認してください。","Complete":"完了","Confirmations":"検証数","Conn":"接続数","Connections to other nodes":"他ノードへの接続","Current Blockchain Tip (insight)":"現在のブロックチェインのTip (insight)","Current Sync Status":"現在の同期状況","Details":"詳細","Difficulty":"難易度","Double spent attempt detected. From tx:":"二重支払い攻撃をこのトランザクションから検知しました：","Error message:":"エラーメッセージ:","Error!":"エラー！","Fee":"手数料","Final Balance":"最終残高","Finish Date":"終了日時","Go to home":"ホームへ","Hash Serialized":"シリアライズデータのハッシュ値","Height":"ブロック高","Included in Block":"取り込まれたブロック","Incoherence in levelDB detected:":"levelDBの破損を検知しました:","Info Errors":"エラー情報","Initial Block Chain Height":"起動時のブロック高","Input":"入力","Last Block":"直前のブロック","Last Block Hash (Bitcoind)":"直前のブロックのハッシュ値 (Bitcoind)","Latest Blocks":"最新のブロック","Latest Transactions":"最新のトランザクション","Loading Address Information":"アドレス情報を読み込んでいます","Loading Block Information":"ブロック情報を読み込んでいます","Loading Selected Date...":"選択されたデータを読み込んでいます...","Loading Transaction Details":"トランザクションの詳細を読み込んでいます","Loading Transactions...":"トランザクションを読み込んでいます...","Loading...":"ロード中...","Message":"メッセージ","Mined Time":"採掘時刻","Mined by":"採掘者","Mining Difficulty":"採掘難易度","Next Block":"次のブロック","No Inputs (Newly Generated Coins)":"入力なし (新しく生成されたコイン)","No blocks yet.":"ブロックはありません。","No matching records found!":"一致するレコードはありません！","No. Transactions":"トランザクション数","Number Of Transactions":"トランザクション数","Output":"出力","Powered by":"Powered by","Previous Block":"前のブロック","Protocol version":"プロトコルバージョン","Proxy setting":"プロキシ設定","Raw transaction data":"トランザクションの生データ","Raw transaction data must be a valid hexadecimal string.":"生のトランザクションデータは有効な16進数でなければいけません。","Received Time":"受信時刻","Redirecting...":"リダイレクトしています...","Search for block, transaction or address":"ブロック、トランザクション、アドレスを検索","See all blocks":"すべてのブロックをみる","Send transaction":"トランザクションを送信","Show Transaction Output data":"トランザクションの出力データをみる","Show all":"すべて表示","Show input":"入力を表示","Show less":"隠す","Show more":"表示する","Signature":"署名","Size":"サイズ","Size (bytes)":"サイズ (バイト)","Skipped Blocks (previously synced)":"スキップされたブロック (同期済み)","Start Date":"開始日時","Status":"ステータス","Summary":"概要","Summary <small>confirmed</small>":"サマリ <small>検証済み</small>","Sync Progress":"同期の進捗状況","Sync Status":"同期ステータス","Sync Type":"同期タイプ","Synced Blocks":"同期されたブロック数","Testnet":"テストネット","The message failed to verify.":"メッセージの検証に失敗しました。","The message is verifiably from {{verification.address}}.":"メッセージは{{verification.address}}により検証されました。","There are no transactions involving this address.":"このアドレスに対するトランザクションはありません。","This form can be used to broadcast a raw transaction in hex format over\n        the Bitcoin network.":"このフォームでは、16進数フォーマットの生のトランザクションをBitcoinネットワーク上に配信することができます。","This form can be used to verify that a message comes from\n        a specific Bitcoin address.":"このフォームでは、メッセージが特定のBitcoinアドレスから来たかどうかを検証することができます。","Time Offset":"時間オフセット","Timestamp":"タイムスタンプ","Today":"今日","Total Amount":"Bitcoin総量","Total Received":"総入金額","Total Sent":"総送金額","Transaction":"トランザクション","Transaction Output Set Information":"トランザクションの出力セット情報","Transaction Outputs":"トランザクションの出力","Transaction succesfully broadcast.<br>Transaction id: {{txid}}":"トランザクションの配信に成功しました。<br>トランザクションID: {{txid}}","Transactions":"トランザクション","Type":"タイプ","Unconfirmed":"未検証","Unconfirmed Transaction!":"未検証のトランザクションです！","Unconfirmed Txs Balance":"未検証トランザクションの残高","Value Out":"出力値","Verify":"検証","Verify signed message":"署名済みメッセージを検証","Version":"バージョン","Waiting for blocks...":"ブロックを待っています...","Waiting for transactions...":"トランザクションを待っています...","by date.":"日毎。","first seen at":"最初に発見された日時","mined":"採掘された","mined on:":"採掘日時:","(Mainchain)":"(メインチェーン)","(Orphaned)":"(孤立したブロック)","Bits":"Bits","Block #{{block.height}}":"ブロック #{{block.height}}","BlockHash":"ブロックのハッシュ値","Blocks <br> mined on:":"ブロック <br> 採掘日","Coinbase":"コインベース","Hash":"ハッシュ値","LockTime":"ロック時間","Merkle Root":"Merkleルート","Nonce":"Nonce","Ooops!":"おぉっと！","Output is spent":"出力は使用済みです","Output is unspent":"出力は未使用です","Scan":"スキャン","Show/Hide items details":"アイテムの詳細を表示または隠す","Waiting for blocks":"ブロックを待っています","by date. {{detail}} {{before}}":"日時順 {{detail}} {{before}}","scriptSig":"scriptSig","{{tx.confirmations}} Confirmations":"{{tx.confirmations}} 検証","<span class=\"glyphicon glyphicon-warning-sign\"></span> (Orphaned)":"<span class=\"glyphicon glyphicon-warning-sign\"></span> (孤立したブロック)","<span class=\"glyphicon glyphicon-warning-sign\"></span> Incoherence in levelDB detected: {{vin.dbError}}":"<span class=\"glyphicon glyphicon-warning-sign\"></span> Incoherence in levelDB detected: {{vin.dbError}}","Waiting for blocks <span class=\"loader-gif\"></span>":"ブロックを待っています <span class=\"loader-gif\"></span>"});
+ /* jshint +W100 */
+-}]);
+\ No newline at end of file
++}]);
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/src/js/app.js old_modules/insight-ui/public/src/js/app.js
+--- node_modules/insight-ui/public/src/js/app.js	2015-09-03 18:19:40.000000000 -0300
++++ old_modules/insight-ui/public/src/js/app.js	2018-01-11 12:32:32.027000000 -0300
+@@ -1,7 +1,7 @@
+ 'use strict';
+ 
+ var defaultLanguage = localStorage.getItem('insight-language') || 'en';
+-var defaultCurrency = localStorage.getItem('insight-currency') || 'BTC';
++var defaultCurrency = localStorage.getItem('insight-currency') || 'CHA';
+ 
+ angular.module('insight',[
+   'ngAnimate',
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/src/js/config.js old_modules/insight-ui/public/src/js/config.js
+--- node_modules/insight-ui/public/src/js/config.js	2015-10-16 22:07:14.000000000 -0300
++++ old_modules/insight-ui/public/src/js/config.js	2018-01-11 12:43:24.644000000 -0300
+@@ -66,7 +66,7 @@
+       ngProgress.complete();
+ 
+       //Change page title, based on Route information
+-      $rootScope.titleDetail = '';
++      $rootScope.titleDetail = 'Chaucha Insight';
+       $rootScope.title = $route.current.title;
+       $rootScope.isCollapsed = true;
+       $rootScope.currentAddr = null;
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/src/js/controllers/currency.js old_modules/insight-ui/public/src/js/controllers/currency.js
+--- node_modules/insight-ui/public/src/js/controllers/currency.js	2015-09-03 18:19:40.000000000 -0300
++++ old_modules/insight-ui/public/src/js/controllers/currency.js	2018-01-11 12:36:02.836000000 -0300
+@@ -20,7 +20,7 @@
+ 
+         if (this.symbol === 'USD') {
+           response = _roundFloat((value * this.factor), 2);
+-        } else if (this.symbol === 'mBTC') {
++        } else if (this.symbol === 'mCHA') {
+           this.factor = 1000;
+           response = _roundFloat((value * this.factor), 5);
+         } else if (this.symbol === 'bits') {
+@@ -47,7 +47,7 @@
+         Currency.get({}, function(res) {
+           $rootScope.currency.factor = $rootScope.currency.bitstamp = res.data.bitstamp;
+         });
+-      } else if (currency === 'mBTC') {
++      } else if (currency === 'mCHA') {
+         $rootScope.currency.factor = 1000;
+       } else if (currency === 'bits') {
+         $rootScope.currency.factor = 1000000;
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/src/js/controllers/header.js old_modules/insight-ui/public/src/js/controllers/header.js
+--- node_modules/insight-ui/public/src/js/controllers/header.js	2015-09-03 18:19:40.000000000 -0300
++++ old_modules/insight-ui/public/src/js/controllers/header.js	2018-01-11 12:35:48.151000000 -0300
+@@ -7,7 +7,7 @@
+     $rootScope.currency = {
+       factor: 1,
+       bitstamp: 0,
+-      symbol: 'BTC'
++      symbol: 'CHA'
+     };
+ 
+     $scope.menu = [{
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/views/address.html old_modules/insight-ui/public/views/address.html
+--- node_modules/insight-ui/public/views/address.html	2015-10-16 22:07:14.000000000 -0300
++++ old_modules/insight-ui/public/views/address.html	2018-01-11 12:33:13.795000000 -0300
+@@ -7,7 +7,7 @@
+           <span class="btn-copy" clip-copy="address.addrStr"></span>
+       </div>
+       <div class="col-md-4">
+-        <span class="txvalues txvalues-primary"><strong translate>Final Balance</strong> {{$root.currency.getConvertion(address.balance) || address.balance + ' BTC' }}</span>
++        <span class="txvalues txvalues-primary"><strong translate>Final Balance</strong> {{$root.currency.getConvertion(address.balance) || address.balance + ' CHA' }}</span>
+       </div>
+     </div>
+     <div class="hide_snavbar">
+@@ -17,7 +17,7 @@
+       </a>
+     </div>
+   </div>
+-  <h1><span translate>Address</span> <small data-ng-show="address.addrStr">{{$root.currency.getConvertion(address.balance) || address.balance + ' BTC'}}</small></h1>
++  <h1><span translate>Address</span> <small data-ng-show="address.addrStr">{{$root.currency.getConvertion(address.balance) || address.balance + ' CHA'}}</small></h1>
+   <div class="text-muted" data-ng-if="!address.addrStr">
+     <span translate>Loading Address Information</span> <span class="loader-gif"></span>
+   </div>
+@@ -34,15 +34,15 @@
+           <tbody>
+           <tr>
+             <td><strong translate>Total Received</strong></td>
+-            <td class="ellipsis text-right">{{$root.currency.getConvertion(address.totalReceived) || address.totalReceived + ' BTC'}}</td>
++            <td class="ellipsis text-right">{{$root.currency.getConvertion(address.totalReceived) || address.totalReceived + ' CHA'}}</td>
+           </tr>
+           <tr>
+             <td><strong translate>Total Sent</strong></td>
+-            <td class="ellipsis text-right">{{$root.currency.getConvertion(address.totalSent) || address.totalSent + ' BTC'}}</td>
++            <td class="ellipsis text-right">{{$root.currency.getConvertion(address.totalSent) || address.totalSent + ' CHA'}}</td>
+           </tr>
+           <tr>
+             <td><strong translate>Final Balance</strong></td>
+-            <td class="ellipsis text-right">{{$root.currency.getConvertion(address.balance) || address.balance + ' BTC'}}</td>
++            <td class="ellipsis text-right">{{$root.currency.getConvertion(address.balance) || address.balance + ' CHA'}}</td>
+           </tr>
+           <tr>
+             <td><strong translate>No. Transactions</strong></td>
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/views/block.html old_modules/insight-ui/public/views/block.html
+--- node_modules/insight-ui/public/views/block.html	2016-04-15 16:27:10.000000000 -0300
++++ old_modules/insight-ui/public/views/block.html	2018-01-11 12:34:02.804000000 -0300
+@@ -59,7 +59,7 @@
+           </tr>
+           <tr>
+             <td><strong translate>Block Reward</strong></td>
+-            <td class="text-right text-muted">{{$root.currency.getConvertion(block.reward) || block.reward + ' BTC'}}</td>
++            <td class="text-right text-muted">{{$root.currency.getConvertion(block.reward) || block.reward + ' CHA'}}</td>
+           </tr> 
+           <tr>
+             <td><strong translate>Timestamp</strong></td>
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/views/includes/currency.html old_modules/insight-ui/public/views/includes/currency.html
+--- node_modules/insight-ui/public/views/includes/currency.html	2015-10-16 22:07:14.000000000 -0300
++++ old_modules/insight-ui/public/views/includes/currency.html	2018-01-11 12:35:25.635000000 -0300
+@@ -6,10 +6,10 @@
+   <a data-ng-click="setCurrency('USD')" data-ng-class="{active: currency.symbol == 'USD'}">USD</a>
+   </li>
+   <li>
+-  <a data-ng-click="setCurrency('BTC')" data-ng-class="{active: currency.symbol == 'BTC'}">BTC</a>
++  <a data-ng-click="setCurrency('CHA')" data-ng-class="{active: currency.symbol == 'CHA'}">CHA</a>
+   </li>
+   <li>
+-  <a data-ng-click="setCurrency('mBTC')" data-ng-class="{active: currency.symbol == 'mBTC'}">mBTC</a>
++  <a data-ng-click="setCurrency('mCHA')" data-ng-class="{active: currency.symbol == 'mCHA'}">mCHA</a>
+   </li> 
+   <li>
+   <a data-ng-click="setCurrency('bits')" data-ng-class="{active: currency.symbol == 'bits'}">bits</a>
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/views/index.html old_modules/insight-ui/public/views/index.html
+--- node_modules/insight-ui/public/views/index.html	2016-04-25 11:28:09.000000000 -0300
++++ old_modules/insight-ui/public/views/index.html	2018-01-11 12:33:30.492000000 -0300
+@@ -52,7 +52,7 @@
+             <td>
+               <a class="ellipsis" href="tx/{{tx.txid}}">{{tx.txid}}</a>
+             </td>
+-            <td class="text-right"><span class="ellipsis">{{$root.currency.getConvertion(tx.valueOut) || tx.valueOut + ' BTC'}}</span></td>
++            <td class="text-right"><span class="ellipsis">{{$root.currency.getConvertion(tx.valueOut) || tx.valueOut + ' CHA'}}</span></td>
+           </tr>
+           </tbody>
+         </table>
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/views/transaction/tx.html old_modules/insight-ui/public/views/transaction/tx.html
+--- node_modules/insight-ui/public/views/transaction/tx.html	2015-10-16 22:07:14.000000000 -0300
++++ old_modules/insight-ui/public/views/transaction/tx.html	2018-01-11 12:34:30.163000000 -0300
+@@ -35,7 +35,7 @@
+         <div class="panel panel-default" data-ng-repeat="vin in tx.vinSimple| startFrom:currentInNoExpanded*sizeInNoExpanded | limitTo:sizeInNoExpanded">
+           <div class="panel-body transaction-vin-vout">
+             <div class="pull-right btc-value" data-ng-class="{'text-danger': $root.currentAddr == vin.addr}">
+-              {{$root.currency.getConvertion(vin.value) || vin.value + ' BTC'}}
++              {{$root.currency.getConvertion(vin.value) || vin.value + ' CHA'}}
+             </div>
+             <div class="ellipsis">
+               <span data-ng-show="vin.notAddr">{{vin.addr}}</span>
+@@ -68,7 +68,7 @@
+           <div class="panel panel-default transaction-vin-vout">
+             <div class="panel-body">
+               <div class="pull-right btc-value">
+-                {{$root.currency.getConvertion(vin.value) || vin.value + ' BTC'}}
++                {{$root.currency.getConvertion(vin.value) || vin.value + ' CHA'}}
+               </div>
+               <div class="ellipsis">
+                 <a class="glyphicon glyphicon-chevron-right" href="tx/{{vin.txid}}/>/{{vin.vout}}" title="Outpoint: {{vin.txid}},{{vin.vout}}"></a>
+@@ -130,7 +130,7 @@
+           <div class="transaction-vin-vout panel panel-default">
+             <div class="panel-body">
+               <div class="pull-right btc-value" data-ng-class="{'text-success': $root.currentAddr == vout.addr}">
+-                {{$root.currency.getConvertion(vout.value) || vout.value + ' BTC' }}
++                {{$root.currency.getConvertion(vout.value) || vout.value + ' CHA' }}
+                 <span class="text-danger" data-ng-show="vout.isSpent" tooltip="Output is spent" tooltip-placement="left">(S)</span>
+                 <span class="text-success" data-ng-show="!vout.isSpent"  tooltip="Output is unspent" tooltip-placement="left">(U)</span>
+               </div>
+@@ -157,7 +157,7 @@
+           <div class="panel panel-default transaction-vin-vout">
+             <div class="panel-body">
+               <div class="pull-right btc-value">
+-                <span>{{$root.currency.getConvertion(vout.value) || vout.value + ' BTC'}}
++                <span>{{$root.currency.getConvertion(vout.value) || vout.value + ' CHA'}}
+                   <span class="text-success" data-ng-show="!vout.spentTxId" tooltip="Output is unspent" tooltip-placement="left">(U)</span>
+                   <a class="glyphicon glyphicon-chevron-right" data-ng-show="vout.spentTxId" href="tx/{{vout.spentTxId}}/</{{vout.spentIndex}}" title="Spent at: {{vout.spentTxId}},{{vout.spentIndex}}"></a>
+                 </span>
+@@ -200,12 +200,12 @@
+ <div class="line-top row" data-ng-hide="!tx">
+   <div class="col-xs-6 col-sm-4 col-md-4">
+     <span data-ng-show="!tx.isCoinBase &&  !isNaN(parseFloat(tx.fees))"
+-      class="txvalues txvalues-default"><span translate>Fee</span>: {{$root.currency.getConvertion(tx.fees) || tx.fees + 'BTC'}} </span>
++      class="txvalues txvalues-default"><span translate>Fee</span>: {{$root.currency.getConvertion(tx.fees) || tx.fees + 'CHA'}} </span>
+   </div>
+   <div class="col-xs-6 col-sm-8 col-md-8 text-right">
+     <span data-ng-show="tx.confirmations" class="txvalues
+       txvalues-success">{{tx.confirmations}} <span translate>Confirmations</span></span>
+     <span data-ng-show="!tx.confirmations" class="txvalues txvalues-danger" translate>Unconfirmed Transaction!</span>
+-    <span class="txvalues txvalues-primary">{{$root.currency.getConvertion(tx.valueOut) || tx.valueOut + ' BTC' }}</span>
++    <span class="txvalues txvalues-primary">{{$root.currency.getConvertion(tx.valueOut) || tx.valueOut + ' CHA' }}</span>
+   </div>
+ </div>
+diff -uNr -x git -x .git -x lazy-cache node_modules/insight-ui/public/views/transaction.html old_modules/insight-ui/public/views/transaction.html
+--- node_modules/insight-ui/public/views/transaction.html	2015-10-16 22:07:14.000000000 -0300
++++ old_modules/insight-ui/public/views/transaction.html	2018-01-11 12:34:53.459000000 -0300
+@@ -16,7 +16,7 @@
+         </span>
+         <span data-ng-show="!tx.confirmations" 
+           class="txvalues txvalues-danger" translate>Unconfirmed Transaction!</span>
+-        <span class="txvalues txvalues-primary">{{$root.currency.getConvertion(tx.valueOut) || tx.valueOut + ' BTC' }}</span>
++        <span class="txvalues txvalues-primary">{{$root.currency.getConvertion(tx.valueOut) || tx.valueOut + ' CHA' }}</span>
+       </div>
+     </div>
+     <div class="hide_snavbar">
+@@ -54,7 +54,7 @@
+         </tr>
+         <tr data-ng-show="tx.fees">
+           <td><strong translate>Fee Rate</strong></td>
+-          <td class="text-muted text-right">{{$root.currency.getConvertion((tx.fees * 1000) / tx.size) + ' per kB' || ((tx.fees * 1000) / tx.size) + 'BTC per kB'}}</td>
++          <td class="text-muted text-right">{{$root.currency.getConvertion((tx.fees * 1000) / tx.size) + ' per kB' || ((tx.fees * 1000) / tx.size) + 'CHA per kB'}}</td>
+         </tr>
+         <tr>
+           <td><strong translate>Received Time</strong></td>
