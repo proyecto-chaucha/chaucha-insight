@@ -10,7 +10,7 @@
   "servicesConfig": {
     "bitcoind": {
       "spawn": {
-        "datadir": "/root/insight/config",
+        "datadir": "/root/insight/data",
         "exec": "/root/insight/chaucha-insight/chauchad"
       }
     }
