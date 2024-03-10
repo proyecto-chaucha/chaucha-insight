@@ -33,6 +33,8 @@ RUN mkdir -p ~/.litecoin/data
 COPY chaucha-insight/litecore-node.json /root/.litecoin
 COPY config/bitcoin.conf /root/.litecoin/data
 
-WORKDIR /
+#WORKDIR /
+COPY config/start.sh /root/start.sh
+RUN chmod +x /root/start.sh
 
-ENTRYPOINT ["/root/insight/chaucha-insight/node_modules/litecore-node/bin/litecore-node", "start"]
+ENTRYPOINT ["/root/start.sh"]
